@@ -58,6 +58,7 @@ public class App {
         if (currentUser == null) {
             consoleService.printErrorMessage();
         }
+        //tenmoService currentUser.getToken()
     }
 
     private void mainMenu() {
