@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TransferDao
 {
-    public boolean createNewTransfer(int transfer_type_id, int transfer_status_id, int account_from, int account_to, BigDecimal amount);
+    public Transfer createNewTransfer(int transfer_type_id, int transfer_status_id, int account_from, int account_to, BigDecimal amount);
 
     public List<Transfer> getTransferByUser(int userId);
 

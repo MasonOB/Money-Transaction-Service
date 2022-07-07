@@ -72,8 +72,9 @@ public class AccountController
     public List<Transfer> getTransferByUser(Principal user)
     {
         int userId = userDao.findIdByUsername(user.getName());
+        int accountId = accountDao.getAccountById(userId).getAccountId();
 
-        return transferDao.getTransferByUser(userId);
+        return transferDao.getTransferByUser(accountId);
     }
     @RequestMapping(path = "/transfers/{id}", method = RequestMethod.GET)
     public List<Transfer> getTransfersByTransferId(@PathVariable("id") int transferId)
