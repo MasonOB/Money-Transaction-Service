@@ -2,6 +2,7 @@ package com.techelevator.tenmo.services;
 
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.User;
 import com.techelevator.util.BasicLogger;
 import org.springframework.http.*;
 import org.springframework.web.client.ResourceAccessException;
@@ -45,6 +46,19 @@ public class TenmoService {
             BasicLogger.log(e.getMessage());
         }
         return transfers;
+    }
+
+    public User[] listUsers() {
+        User[] users = null;
+        try {
+            ResponseEntity<User[]> response =
+                    restTemplate.exchange(API_BASE_URL + "users",
+                            HttpMethod.GET, makeAuthEntity(), User[].class);
+            users = response.getBody();
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return users;
     }
 
     public boolean updateAccounts(Account fromAccount, Account toAccount) {

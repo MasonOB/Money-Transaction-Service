@@ -2,10 +2,13 @@ package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TenmoService;
+
+import java.math.BigDecimal;
 
 public class App {
 
@@ -111,8 +114,17 @@ public class App {
 		
 	}
 
-	private void sendBucks() {
-
+	private void sendBucks()
+    {
+        User[] users = tenmoService.listUsers();
+        if (users != null)
+        {
+            consoleService.printUsers(users);
+            int id = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel):");
+            BigDecimal amount = consoleService.promptForBigDecimal("Enter amount: ");
+        }else {
+            consoleService.printErrorMessage();
+        }
 		
 	}
 

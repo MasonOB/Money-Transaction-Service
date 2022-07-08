@@ -60,17 +60,29 @@ public class JdbcAccountDao implements AccountDao
 
     @Override
     public Account subtractAccountBalance(int id, BigDecimal transferAmount) {
+        String sql = "UPDATE tenmo_account " +
+                "SET balance = ? " +
+                "WHERE user_id = ?;";
+
+
        Account account = getAccountById(id);
        BigDecimal newBalance = account.getBalance().subtract(transferAmount);
        account.setBalance(newBalance);
+       jdbcTemplate.update(sql,newBalance,id);
         return account;
     }
 
     @Override
-    public Account addAccountBalance(int id, BigDecimal transferAmount) {
+    public Account addAccountBalance(int id, BigDecimal transferAmount)
+    {
+        String sql = "UPDATE tenmo_account " +
+                "SET balance = ? " +
+                "WHERE user_id = ?;";
+
         Account account = getAccountById(id);
         BigDecimal newBalance = account.getBalance().add(transferAmount);
         account.setBalance(newBalance);
+        jdbcTemplate.update(sql,newBalance,id);
         return account;
     }
 

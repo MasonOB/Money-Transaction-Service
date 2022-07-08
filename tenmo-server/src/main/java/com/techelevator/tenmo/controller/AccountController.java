@@ -7,6 +7,7 @@ import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.TransferDTO;
+import com.techelevator.tenmo.model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,18 +40,18 @@ public class AccountController
     }
 
     @RequestMapping(path = "/accounts/{id}", method = RequestMethod.PUT)
-    public boolean transferBalance(Principal user, @PathVariable String username, @PathVariable BigDecimal transferAmount)
+    public boolean transferBalance(Principal user, @Valid @RequestBody TransferDTO transferDTO)
     {
         int userFromId = userDao.findIdByUsername(user.getName());
-        int userToId = userDao.findIdByUsername(username);
-        if(user.getName().equals(username) || transferAmount.compareTo(BigDecimal.valueOf(0)) <= 0 ||
-        accountDao.getBalanceById(userFromId).compareTo(transferAmount) < 0)
+        int userToId = userDao.findIdByUsername(transferDTO.getUsername());
+        if(user.getName().equals(transferDTO.getUsername()) || transferDTO.getTransferAmount().compareTo(BigDecimal.valueOf(0)) <= 0 ||
+        accountDao.getBalanceById(userFromId).compareTo(transferDTO.getTransferAmount()) < 0)
         {
             return false;
         } else
         {
-            accountDao.subtractAccountBalance(userFromId, transferAmount);
-            accountDao.addAccountBalance(userToId, transferAmount);
+            accountDao.subtractAccountBalance(userFromId, transferDTO.getTransferAmount());
+            accountDao.addAccountBalance(userToId, transferDTO.getTransferAmount());
             return true;
         }
     }
@@ -66,6 +67,12 @@ public class AccountController
 
         transferDao.createNewTransfer(2,2,accountFrom,accountTo,transferAmount);
         return true;
+    }
+
+    @RequestMapping(path = "/users", method = RequestMethod.GET)
+    public List<User> listUsers()
+    {
+        return userDao.findAll();
     }
 
     @RequestMapping(path = "/transfers/filter", method = RequestMethod.GET)
